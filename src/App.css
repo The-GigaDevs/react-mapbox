@@ -1,0 +1,14 @@
+.marker-icon {
+  font-size: 2rem;
+}
+
+.mapboxgl-popup-close-button {
+  font-size: larger;
+  background-color: gray;
+  color: white;
+  border-radius: 2px;
+}
+.mapboxgl-popup-close-button:hover {
+  background-color: red;
+  color: white;
+}
