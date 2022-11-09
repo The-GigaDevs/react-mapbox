@@ -12,6 +12,7 @@ import Map, {
 } from "react-map-gl";
 import "./App.css";
 import { ControlDropDown, ExampleResponse, Feature } from "./app.model";
+import { DUMMY_RESPONSE } from "./example-response";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 function App() {
@@ -43,11 +44,13 @@ function App() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3001/example")
-      .then((response) => response.json())
-      .then((data) => {
-        setGeoData(data);
-      });
+
+    setGeoData(DUMMY_RESPONSE);
+    // fetch("http://localhost:3001/example")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setGeoData(data);
+    //   });
   }, []);
 
   return (
