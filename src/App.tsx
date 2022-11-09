@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Map, {
   ControlPosition,
   FullscreenControl,
@@ -19,8 +19,9 @@ function App() {
   const [geoData, setGeoData] = useState<ExampleResponse>(
     {} as ExampleResponse
   );
+  let clickRef = useRef(null);
   const [showControls, setShowControls] = useState(true);
-  const [position, setPosition] = useState<ControlPosition>("bottom-left");
+  const [position, setPosition] = useState<ControlPosition>("bottom-right");
   const [popupInfo, setPopupInfo] = useState<Feature | null>(null);
 
   const controlPositions: ControlDropDown[] = [
@@ -32,28 +33,27 @@ function App() {
 
   const toggleControls = () => {
     setShowControls(!showControls);
+
   };
 
   const updatePosition = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const position = e.target.value as ControlPosition;
-    debugger
-    //set controls-position to the selected position
-    setPosition(position);
-    // if (position) {
-    //   setPosition("bottom-left");
-    //   // FIXME: this is not working debug later.
-    // }
+    const pointer = e.target.value as ControlPosition;
+    setPosition(pointer);
+         // @ts-ignore: Object is possibly 'null'.
+    clickRef.current.click();
+         
   };
 
   useEffect(() => {
 
     setGeoData(DUMMY_RESPONSE);
-    // fetch("http://localhost:3001/example")
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setGeoData(data);
-    //   });
+
   }, []);
+
+  useEffect(() => {
+    // @ts-ignore: Object is possibly 'null'.
+    clickRef.current.click();
+  }, [position]);
 
   return (
     <div className="container mt-3">
@@ -111,7 +111,7 @@ function App() {
           </Popup>
         )}
       </Map>
-      <button className="btn btn-primary" onClick={toggleControls}>
+      <button className="btn btn-primary" onClick={toggleControls} ref={clickRef}>
         {showControls ? "Hide" : "Show"} Controls
       </button>
       <select className="form-control" onChange={updatePosition}>
