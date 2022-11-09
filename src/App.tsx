@@ -20,7 +20,7 @@ function App() {
     {} as ExampleResponse
   );
   const [showControls, setShowControls] = useState(true);
-  const [position, setPosition] = useState<ControlPosition>("bottom-right");
+  const [position, setPosition] = useState<ControlPosition>("bottom-left");
   const [popupInfo, setPopupInfo] = useState<Feature | null>(null);
 
   const controlPositions: ControlDropDown[] = [
@@ -36,11 +36,13 @@ function App() {
 
   const updatePosition = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const position = e.target.value as ControlPosition;
-    console.log("position is", position);
-    if (position) {
-      setPosition("bottom-right");
-      // FIXME: this is not working debug later.
-    }
+    debugger
+    //set controls-position to the selected position
+    setPosition(position);
+    // if (position) {
+    //   setPosition("bottom-left");
+    //   // FIXME: this is not working debug later.
+    // }
   };
 
   useEffect(() => {
