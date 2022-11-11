@@ -13,6 +13,7 @@ import Map, {
 import "./App.css";
 import { ControlDropDown, ExampleResponse, Feature } from "./app.model";
 import { DUMMY_RESPONSE } from "./example-response";
+import ZoomSlider from "./ZoomSlider";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 function App() {
@@ -120,6 +121,7 @@ function App() {
           </option>
         ))}
       </select>
+      <ZoomSlider />
     </div>
   );
 }
