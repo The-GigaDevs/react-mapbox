@@ -20,6 +20,7 @@ function App() {
   const [geoData, setGeoData] = useState<ExampleResponse>(
     {} as ExampleResponse
   );
+  let clickRef = useRef(null);
   const [showControls, setShowControls] = useState(true);
   const [position, setPosition] = useState<ControlPosition>("bottom-right");
   const [popupInfo, setPopupInfo] = useState<Feature | null>(null);
@@ -35,24 +36,27 @@ function App() {
 
   const toggleControls = () => {
     setShowControls(!showControls);
+
   };
 
   const updatePosition = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const position = e.target.value as ControlPosition;
-    if (position) {
-      setPosition("bottom-right");
-    }
+    const pointer = e.target.value as ControlPosition;
+    setPosition(pointer);
+    // @ts-ignore: Object is possibly 'null'.
+    clickRef.current.click();
+
   };
 
   useEffect(() => {
 
     setGeoData(DUMMY_RESPONSE);
-    // fetch("http://localhost:3001/example")
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setGeoData(data);
-    //   });
+
   }, []);
+
+  useEffect(() => {
+    // @ts-ignore: Object is possibly 'null'.
+    clickRef.current.click();
+  }, [position]);
 
   return (
     <div className="container mt-3">
@@ -111,7 +115,7 @@ function App() {
           </Popup>
         )}
       </Map>
-      <button className="btn btn-primary" onClick={toggleControls}>
+      <button className="btn btn-primary" onClick={toggleControls} ref={clickRef}>
         {showControls ? "Hide" : "Show"} Controls
       </button>
       <select className="form-control" onChange={updatePosition}>
