@@ -1,10 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Map, {
   ControlPosition,
   FullscreenControl,
-  GeolocateControl,
+  GeolocateControl, MapRef,
   Marker,
   NavigationControl,
   Popup,
@@ -23,6 +23,8 @@ function App() {
   const [showControls, setShowControls] = useState(true);
   const [position, setPosition] = useState<ControlPosition>("bottom-right");
   const [popupInfo, setPopupInfo] = useState<Feature | null>(null);
+  const mapRef = useRef<MapRef | null>(null);
+
 
   const controlPositions: ControlDropDown[] = [
     { value: "top-left", label: "Top Left" },
@@ -37,10 +39,8 @@ function App() {
 
   const updatePosition = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const position = e.target.value as ControlPosition;
-    console.log("position is", position);
     if (position) {
       setPosition("bottom-right");
-      // FIXME: this is not working debug later.
     }
   };
 
@@ -65,6 +65,7 @@ function App() {
         style={{ width: "100%", height: "50vh" }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
         mapboxAccessToken={ACCESS_TOKEN}
+        ref={mapRef}
       >
         {showControls && (
           <div>
@@ -121,7 +122,7 @@ function App() {
           </option>
         ))}
       </select>
-      <ZoomSlider />
+      <ZoomSlider mapRef={mapRef} />
     </div>
   );
 }

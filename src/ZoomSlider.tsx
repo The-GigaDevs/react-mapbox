@@ -1,16 +1,16 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { MapProvider, useMap } from "react-map-gl";
+import { MapProvider, MapRef } from "react-map-gl";
 
-function ZoomSlider() {
-    // const { current: map } = useMap();
-    const { map } = useMap();
+interface Props {
+    mapRef: React.MutableRefObject<MapRef | null>;
+}
 
+function ZoomSlider({ mapRef }: Props): JSX.Element {
+
+    const map = mapRef.current;
     const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const zoom = +e.target.value;
-        console.log(map);
-        debugger;
         map?.flyTo({ zoom });
-        // map?.setZoom(zoom);
     };
 
     return (
@@ -22,10 +22,9 @@ function ZoomSlider() {
                 type="range"
                 className="form-range"
                 min="0"
-                max="100"
-                step="10"
+                max="10"
+                step="0.5"
                 onChange={handleSliderChange}
-                id="customRange3"
             />
         </MapProvider>
     );
