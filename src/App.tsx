@@ -16,7 +16,9 @@ import { DUMMY_RESPONSE } from "./example-response";
 import ZoomSlider from "./ZoomSlider";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
-function App() {
+
+
+function App(): JSX.Element {
   const [geoData, setGeoData] = useState<ExampleResponse>(
     {} as ExampleResponse
   );
@@ -36,7 +38,6 @@ function App() {
 
   const toggleControls = () => {
     setShowControls(!showControls);
-
   };
 
   const updatePosition = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -44,13 +45,11 @@ function App() {
     setPosition(pointer);
     // @ts-ignore: Object is possibly 'null'.
     clickRef.current.click();
-
   };
 
   useEffect(() => {
 
     setGeoData(DUMMY_RESPONSE);
-
   }, []);
 
   useEffect(() => {
