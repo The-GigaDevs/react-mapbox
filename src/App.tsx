@@ -57,6 +57,16 @@ function App(): JSX.Element {
     clickRef.current.click();
   }, [position]);
 
+  function firstRender(){
+    //this is a hack to make the slider work at the start. because until and unless there is a click on the map, the mapRef is null, hence the slider does not work. to make 
+    //the slider work at the start, we are clicking on the map (means having some activity on the map when it loads first time).
+    // @ts-ignore: Object is possibly 'null'.
+   clickRef.current.click();
+   //clicking again to show the controls on the map again. 
+    // @ts-ignore: Object is possibly 'null'.
+   clickRef.current.click();
+  }
+
   return (
     <div className="container mt-3">
       <Map
@@ -69,6 +79,7 @@ function App(): JSX.Element {
         mapStyle="mapbox://styles/mapbox/streets-v11"
         mapboxAccessToken={ACCESS_TOKEN}
         ref={mapRef}
+        onLoad={firstRender}
       >
         {showControls && (
           <div>
