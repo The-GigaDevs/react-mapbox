@@ -12,6 +12,7 @@ import Map, {
 } from "react-map-gl";
 import "./App.css";
 import { ControlDropDown, ExampleResponse, Feature } from "./app.model";
+import Controls from "./controls";
 import { DUMMY_RESPONSE } from "./example-response";
 import ZoomSlider from "./ZoomSlider";
 
@@ -26,7 +27,29 @@ function App(): JSX.Element {
   const [showControls, setShowControls] = useState(true);
   const [position, setPosition] = useState<ControlPosition>("bottom-right");
   const [popupInfo, setPopupInfo] = useState<Feature | null>(null);
+  const [options, setOptions] = useState([false, false, false, false])
   const mapRef = useRef<MapRef | null>(null);
+
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOptions([event.target.checked, event.target.checked, event.target.checked, event.target.checked]);
+    };
+
+    const handleScaleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOptions([event.target.checked, options[1], options[2], options[3]]);
+    }
+
+    const handleNavigationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOptions([options[0], event.target.checked, options[2], options[3]]);
+    }
+    
+    const handleFullScreenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOptions([options[0], options[1], event.target.checked, options[3]]);
+    }
+
+    const handleGeolocateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOptions([options[0], options[1], options[2], event.target.checked]);
+    }
 
 
   const controlPositions: ControlDropDown[] = [
@@ -81,18 +104,27 @@ function App(): JSX.Element {
         ref={mapRef}
         onLoad={firstRender}
       >
+        
         {showControls && (
           <div>
-            <ScaleControl maxWidth={100} unit="metric" position={position} />
+            {options[0] && 
+              <ScaleControl maxWidth={100} unit="metric" position={position} />}
+
+            {options[1] && 
             <NavigationControl
               showCompass={true}
               showZoom={true}
               position={position}
-            />
-            <FullscreenControl position={position} />
+            />}
+            {options[2] &&
+              <FullscreenControl position={position} />
+            }
+           {options[3] &&
             <GeolocateControl position={position} />
+           }
           </div>
         )}
+
         {geoData.features &&
           geoData.features.map((feature, index) => (
             <Marker
@@ -137,6 +169,7 @@ function App(): JSX.Element {
         ))}
       </select>
       <ZoomSlider mapRef={mapRef} />
+    <Controls options={options} handleChange={handleChange} handleScaleChange={handleScaleChange} handleNavigationChange={handleNavigationChange} handleFullScreenChange={handleFullScreenChange} handleGeolocateChange={handleGeolocateChange}/>
     </div>
   );
 }
