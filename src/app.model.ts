@@ -42,3 +42,8 @@ export interface ControlDropDown {
     value: ControlPosition;
     label: string;
 }
+
+export interface ObjectTypes {
+    value: string;
+    checked: boolean
+}

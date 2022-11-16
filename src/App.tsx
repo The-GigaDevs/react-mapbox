@@ -10,10 +10,12 @@ import Map, {
   Popup,
   ScaleControl
 } from "react-map-gl";
+import { ObjectType } from "typescript";
 import "./App.css";
-import { ControlDropDown, ExampleResponse, Feature } from "./app.model";
+import { ControlDropDown, ExampleResponse, Feature, ObjectTypes } from "./app.model";
 import Controls from "./controls";
 import { DUMMY_RESPONSE } from "./example-response";
+import ObjectTypesComponent from "./ObjectTypes";
 import ZoomSlider from "./ZoomSlider";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -27,48 +29,34 @@ function App(): JSX.Element {
   const [showControls, setShowControls] = useState(true);
   const [position, setPosition] = useState<ControlPosition>("bottom-right");
   const [popupInfo, setPopupInfo] = useState<Feature | null>(null);
-  const [options, setOptions] = useState([false, false, false, false])
+  const [options, setOptions] = useState([true, true, true, true]);
   const mapRef = useRef<MapRef | null>(null);
 
+  //extract the ObjectType from the response and put it in an array and extract the unique values
+  const objectTypes = geoData.features?.map((feature) => feature.properties?.ObjectType);
+ const uniqueObjectTypes = objectTypes?.filter((value, index, self) => self.indexOf(value) === index);
+ //convert the unique values into an array of objects with the checked property set to true and value set to the unique value
+const controlDropDown = uniqueObjectTypes?.map((value) => ({checked: true, value: value}));
+ //store the unique values in a satet to be used in the dropdown
+ let objectTypeList : ObjectTypes[];
+ let setObjectTypeList: React.Dispatch<React.SetStateAction<ObjectTypes[]>>;
+  [objectTypeList, setObjectTypeList] = useState(controlDropDown);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setOptions([event.target.checked, event.target.checked, event.target.checked, event.target.checked]);
-    };
-
-    const handleScaleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setOptions([event.target.checked, options[1], options[2], options[3]]);
+  useEffect(() => {
+    if(!objectTypeList){
+    setObjectTypeList(controlDropDown);
     }
+  }, [controlDropDown]);
 
-    const handleNavigationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setOptions([options[0], event.target.checked, options[2], options[3]]);
-    }
-    
-    const handleFullScreenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setOptions([options[0], options[1], event.target.checked, options[3]]);
-    }
+  const handleTypesChange = (object: any) => {
+    setObjectTypeList(object)
+  }
 
-    const handleGeolocateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setOptions([options[0], options[1], options[2], event.target.checked]);
-    }
-
-
-  const controlPositions: ControlDropDown[] = [
-    { value: "top-left", label: "Top Left" },
-    { value: "top-right", label: "Top Right" },
-    { value: "bottom-left", label: "Bottom Left" },
-    { value: "bottom-right", label: "Bottom Right" },
-  ];
 
   const toggleControls = () => {
     setShowControls(!showControls);
   };
 
-  const updatePosition = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const pointer = e.target.value as ControlPosition;
-    setPosition(pointer);
-    // @ts-ignore: Object is possibly 'null'.
-    clickRef.current.click();
-  };
 
   useEffect(() => {
 
@@ -104,7 +92,7 @@ function App(): JSX.Element {
         ref={mapRef}
         onLoad={firstRender}
       >
-        
+        <ObjectTypesComponent objectTypes={objectTypeList} setObjectTypeList={handleTypesChange}/>
         {showControls && (
           <div>
             {options[0] && 
@@ -127,17 +115,19 @@ function App(): JSX.Element {
 
         {geoData.features &&
           geoData.features.map((feature, index) => (
-            <Marker
-              key={index}
-              latitude={feature.properties.Latitude}
-              longitude={feature.properties.Longitude}
-              onClick={(e) => {
-                e.originalEvent.stopPropagation();
-                setPopupInfo(feature);
-              }}
-            >
-              <i className="bi bi-geo-alt-fill h4"></i>
-            </Marker>
+            objectTypeList?.find((object) => object.value === feature.properties?.ObjectType)?.checked && (
+              <Marker
+                key={index}
+                latitude={feature.properties.Latitude}
+                longitude={feature.properties.Longitude}
+                onClick={(e) => {
+                  e.originalEvent.stopPropagation();
+                  setPopupInfo(feature);
+                }}
+              >
+                <i className="bi bi-geo-alt-fill h2"></i>
+              </Marker>
+          )
           ))}
         {popupInfo && (
           <Popup
@@ -157,19 +147,10 @@ function App(): JSX.Element {
           </Popup>
         )}
       </Map>
-      <button className="btn btn-primary" onClick={toggleControls} ref={clickRef}>
+      <button className="btn btn-primary" onClick={toggleControls} ref={clickRef} style={{display: 'none'}}>
         {showControls ? "Hide" : "Show"} Controls
       </button>
-      <select className="form-control" onChange={updatePosition}>
-        <option value="">--- Select Control positions ---</option>
-        {controlPositions.map((position, index) => (
-          <option value={position.value} key={index}>
-            {position.label}
-          </option>
-        ))}
-      </select>
       <ZoomSlider mapRef={mapRef} />
-    <Controls options={options} handleChange={handleChange} handleScaleChange={handleScaleChange} handleNavigationChange={handleNavigationChange} handleFullScreenChange={handleFullScreenChange} handleGeolocateChange={handleGeolocateChange}/>
     </div>
   );
 }

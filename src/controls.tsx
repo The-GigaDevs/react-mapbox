@@ -7,7 +7,7 @@ export default function Controls({options, handleChange, handleScaleChange, hand
 
 
     const children = (
-        <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+        <Box className="m-auto" sx={{ display: 'flex', flexDirection: 'row', ml: 3, }}>
             <FormControlLabel
                 label="Scale Control"
                 control={<Checkbox checked={options[0]} onChange={handleScaleChange} />}
@@ -28,7 +28,7 @@ export default function Controls({options, handleChange, handleScaleChange, hand
     )
 
     return(
-        <div>
+        <div className="opacity-75" style={{zIndex: 10, backgroundColor:'gray',  borderRadius: '10px', margin: '10px', backfaceVisibility: 'hidden', color: "black", position: 'absolute' }} >
             <FormControlLabel
                 label="Show Controls"
                 control={
