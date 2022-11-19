@@ -2,11 +2,17 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Grow from "@mui/material/Grow";
 import Switch from "@mui/material/Switch";
 import { useState } from "react";
+import { ObjectTypes } from "./app.model";
+
+interface Props {
+    objectTypes: ObjectTypes[];
+    setObjectTypeList: (object: any) => void;
+}
 
 export default function ObjectTypesComponent({
     objectTypes,
     setObjectTypeList,
-}: any) {
+}: Props): JSX.Element {
     const [open, setOpen] = useState(false);
 
     const handleSwitchChange = (object: any) => {
