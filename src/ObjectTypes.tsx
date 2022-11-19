@@ -1,14 +1,13 @@
-import React, {useState, useEffect} from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import  Switch  from "@mui/material/Switch";
-import  FormControlLabel  from "@mui/material/FormControlLabel";
-import  Grow from "@mui/material/Grow";
-import  Box from "@mui/material/Box";
-import { Theme } from "@mui/material/styles";
-export default function ObjectTypesComponent ({objectTypes, setObjectTypeList} : any)  {
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grow from "@mui/material/Grow";
+import Switch from "@mui/material/Switch";
+import { useState } from "react";
 
+export default function ObjectTypesComponent({
+    objectTypes,
+    setObjectTypeList,
+}: any) {
     const [open, setOpen] = useState(false);
-
 
     const handleSwitchChange = (object: any) => {
         const newObjectTypes = objectTypes.map((obj: any) => {
@@ -18,30 +17,43 @@ export default function ObjectTypesComponent ({objectTypes, setObjectTypeList} :
             return obj;
         });
         setObjectTypeList(newObjectTypes);
-    }
-
+    };
 
     return (
-        <div style={{position: 'absolute', zIndex: 100, display: 'flex', flexDirection: 'column'}}>
+        <div
+            className="object-types"
+            style={{
+                position: "absolute",
+                zIndex: 100,
+                display: "flex",
+                flexDirection: "column",
+                paddingLeft: "1.3rem",
+                paddingTop: "1.3rem",
+                left: "1.3rem",
+            }}
+        >
             <FormControlLabel
                 control={<Switch checked={open} onChange={() => setOpen(!open)} />}
                 label="Object Types"
             />
             {/* <Box sx={{ display: 'flex', direction: 'column'}}> */}
-                
-                    {objectTypes.map((objectType: any) => {
-                        return (
-                            <Grow in={open}>
-                                <FormControlLabel
-                                    control={<Switch checked={objectType.checked} onChange={() => handleSwitchChange(objectType)} />}
-                                    label={objectType.value}
-                                />  
-                            </Grow>
-                        )
-                    })
-                }
-            {/* </Box> */}
-        </div>   
-    )
 
+            {objectTypes.map((objectType: any, index: number) => {
+                return (
+                    <Grow in={open} key={index}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={objectType.checked}
+                                    onChange={() => handleSwitchChange(objectType)}
+                                />
+                            }
+                            label={objectType.value}
+                        />
+                    </Grow>
+                );
+            })}
+            {/* </Box> */}
+        </div>
+    );
 }
