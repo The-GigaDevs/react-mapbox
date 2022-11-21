@@ -28,6 +28,7 @@ function App(): JSX.Element {
   const [position, setPosition] = useState<ControlPosition>("bottom-right");
   const [popupInfo, setPopupInfo] = useState<Feature | null>(null);
   const [options, setOptions] = useState([true, true, true, true]);
+  const [rangeValues, setRangeValues] = useState([75, 2000]);
   const mapRef = useRef<MapRef | null>(null);
 
   //extract the ObjectType from the response and put it in an array and extract the unique values
@@ -47,6 +48,11 @@ function App(): JSX.Element {
   let setObjectTypeList: React.Dispatch<React.SetStateAction<ObjectTypes[]>>;
   [objectTypeList, setObjectTypeList] = useState(controlDropDown);
 
+
+let handleRangleValues = (value: number[]) => {
+  setRangeValues(value);
+}
+  
   useEffect(() => {
     if (!objectTypeList) {
       setObjectTypeList(controlDropDown);
@@ -127,7 +133,7 @@ function App(): JSX.Element {
             (feature, index) =>
               objectTypeList?.find(
                 (object) => object.value === feature.properties?.ObjectType
-              )?.checked && (
+              )?.checked && feature.properties.AGL > rangeValues[0] && feature.properties.AGL <= rangeValues[1] && (
                 <Marker
                   key={index}
                   latitude={feature.properties.Latitude}
@@ -167,7 +173,7 @@ function App(): JSX.Element {
       >
         {showControls ? "Hide" : "Show"} Controls
       </button>
-      <ZoomSlider mapRef={mapRef} />
+      <ZoomSlider mapRef={mapRef} rangeValues={rangeValues} rangeHandler={handleRangleValues}/>
     </div>
   );
 }
