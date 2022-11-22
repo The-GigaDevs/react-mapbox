@@ -12,7 +12,7 @@ import Map, {
   ScaleControl
 } from "react-map-gl";
 import "./App.css";
-import { ExampleResponse, Feature, ObjectTypes } from "./app.model";
+import { ExampleResponse, Feature, ObjectTypeEvent } from "./app.model";
 import { DUMMY_RESPONSE } from "./example-response";
 import ObjectTypesComponent from "./ObjectTypes";
 import ZoomSlider from "./ZoomSlider";
@@ -44,20 +44,20 @@ function App(): JSX.Element {
     value: value,
   }));
   //store the unique values in a satet to be used in the dropdown
-  let objectTypeList: ObjectTypes[];
-  let setObjectTypeList: React.Dispatch<React.SetStateAction<ObjectTypes[]>>;
+  let objectTypeList: ObjectTypeEvent[];
+  let setObjectTypeList: React.Dispatch<React.SetStateAction<ObjectTypeEvent[]>>;
   [objectTypeList, setObjectTypeList] = useState(controlDropDown);
 
 
-let handleRangleValues = (value: number[]) => {
-  setRangeValues(value);
-}
-  
+  let handleRangleValues = (value: number[]) => {
+    setRangeValues(value);
+  }
+
   useEffect(() => {
     if (!objectTypeList) {
       setObjectTypeList(controlDropDown);
     }
-  }, [controlDropDown]);
+  }, [controlDropDown, objectTypeList]);
 
   const handleTypesChange = (object: any) => {
     setObjectTypeList(object);
@@ -97,8 +97,8 @@ let handleRangleValues = (value: number[]) => {
         style={{
           width: "100vw",
           height: "100vh",
-          display:"flex",
-          justifyContent:"center"
+          display: "flex",
+          justifyContent: "center"
 
         }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
@@ -143,7 +143,7 @@ let handleRangleValues = (value: number[]) => {
                     setPopupInfo(feature);
                   }}
                 >
-                  <i className="bi bi-geo-alt-fill h2" style={{fontSize:'25px'}}></i>
+                  <i className="bi bi-geo-alt-fill h2" style={{ fontSize: '25px' }}></i>
                 </Marker>
               )
           )}
@@ -173,7 +173,7 @@ let handleRangleValues = (value: number[]) => {
       >
         {showControls ? "Hide" : "Show"} Controls
       </button>
-      <ZoomSlider mapRef={mapRef} rangeValues={rangeValues} rangeHandler={handleRangleValues}/>
+      <ZoomSlider mapRef={mapRef} rangeValues={rangeValues} rangeHandler={handleRangleValues} />
     </div>
   );
 }

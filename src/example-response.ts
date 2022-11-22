@@ -1,4 +1,6 @@
-export const DUMMY_RESPONSE = {
+import { ExampleResponse } from "./app.model";
+
+export const DUMMY_RESPONSE: ExampleResponse = {
   type: "FeatureCollection",
   features: [
     {

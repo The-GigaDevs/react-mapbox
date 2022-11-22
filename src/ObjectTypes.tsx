@@ -2,10 +2,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Grow from "@mui/material/Grow";
 import Switch from "@mui/material/Switch";
 import { useState } from "react";
-import { ObjectTypes } from "./app.model";
+import { ObjectTypeEvent } from "./app.model";
 
 interface Props {
-    objectTypes: ObjectTypes[];
+    objectTypes: ObjectTypeEvent[];
     setObjectTypeList: (object: any) => void;
 }
 

@@ -25,7 +25,7 @@ export interface Properties {
     City: string;
     Latitude: number;
     Longitude: number;
-    ObjectType: string;
+    ObjectType: ObjectType;
     AGL: number;
     AMSL: number;
     LT: string;
@@ -43,7 +43,61 @@ export interface ControlDropDown {
     label: string;
 }
 
-export interface ObjectTypes {
-    value: string;
+export interface ObjectTypeEvent {
+    value: ObjectType;
     checked: boolean
 }
+
+
+
+export type ObjectType = "RIG" |
+    "STACK" |
+    "BLDG" |
+    "TOWER" |
+    "POLE" |
+    "ELEC_SYS" |
+    "TL_TWR" |
+    "TANK" |
+    "BRIDGE" |
+    "SIGN" |
+    "REFINERY" |
+    "FENCE" |
+    "PLANT" |
+    "GEN_UTIL" |
+    "ELEVATOR" |
+    "ANTENNA" |
+    "NAVAID" |
+    "CTRL_TWR" |
+    "SILO" |
+    "UTILITY_POLE" |
+    "CRANE" |
+    "BLDGTWR" |
+    "VERTICAL_STRUCTURE" |
+    "AG_EQUIP" |
+    "CATENARY" |
+    "WINDSOCK" |
+    "DOME" |
+    "SOLAR_PANELS" |
+    "MET" |
+    "AMUSEMENT_PARK" |
+    "MONUMENT" |
+    "STADIUM" |
+    "COOL_TWR" |
+    "DAM" |
+    "WINDMILL" |
+    "LANDFILL" |
+    "POWER_PLANT" |
+    "TRAMWAY" |
+    "BALLOON" |
+    "SPIRE" |
+    "WALL" |
+    "HEAT_COOL_SYSTEM" |
+    "NATURAL_GAS_SYSTEM" |
+    "LGTHOUSE" |
+    "PIPELINE_PIPE" |
+    "HANGAR" |
+    "ARCH" |
+    "GRAIN_ELEVATOR" |
+    "GATE" |
+    "WIND_INDICATOR" |
+    "UNDEFINED"; 
