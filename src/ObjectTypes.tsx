@@ -1,3 +1,4 @@
+import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grow from "@mui/material/Grow";
 import Switch from "@mui/material/Switch";
@@ -5,61 +6,62 @@ import { useState } from "react";
 import { ObjectTypeEvent } from "./app.model";
 
 interface Props {
-    objectTypes: ObjectTypeEvent[];
-    setObjectTypeList: (object: any) => void;
+  objectTypes: ObjectTypeEvent[];
+  setObjectTypeList: (updatedObjectTypes: ObjectTypeEvent[]) => void;
 }
 
 export default function ObjectTypesComponent({
-    objectTypes,
-    setObjectTypeList,
+  objectTypes,
+  setObjectTypeList,
 }: Props): JSX.Element {
-    const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-    const handleSwitchChange = (object: any) => {
-        const newObjectTypes = objectTypes.map((obj: any) => {
-            if (obj.value === object.value) {
-                obj.checked = !obj.checked;
-            }
-            return obj;
-        });
-        setObjectTypeList(newObjectTypes);
-    };
+  const handleSwitchChange = (objectType: ObjectTypeEvent) => {
+    const newObjectTypes = objectTypes.map((obj) => {
+      if (obj.value === objectType.value) {
+        obj.checked = !obj.checked;
+      }
+      return obj;
+    });
+    setObjectTypeList(newObjectTypes);
+  };
 
-    return (
-        <div
-            className="object-types"
-            style={{
-                position: "absolute",
-                zIndex: 100,
-                display: "flex",
-                flexDirection: "column",
-                paddingLeft: "1.3rem",
-                paddingTop: "1.3rem",
-                left: "1.3rem",
-            }}
-        >
-            <FormControlLabel
-                control={<Switch checked={open} onChange={() => setOpen(!open)} />}
-                label="Object Types"
-            />
-            {/* <Box sx={{ display: 'flex', direction: 'column'}}> */}
+  return (
+    <div className="object-types glass-effect">
+      {open}
+      <FormControlLabel
+        control={<Switch checked={open} onChange={() => setOpen(!open)} />}
+        label="Object Types"
+        className="object-types-switch"
+      />
 
-            {objectTypes.map((objectType: any, index: number) => {
-                return (
-                    <Grow in={open} key={index}>
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={objectType.checked}
-                                    onChange={() => handleSwitchChange(objectType)}
-                                />
-                            }
-                            label={objectType.value}
-                        />
-                    </Grow>
-                );
-            })}
-            {/* </Box> */}
-        </div>
-    );
+      <div
+        className="object scroll scroll-5"
+        style={{
+          overflow: open ? "auto" : "hidden",
+          resize: open ? "vertical" : "none",
+        }}
+      >
+        {open &&
+          objectTypes.map((objectType, index: number) => {
+            return (
+              <>
+                <Grow in={open} key={index}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={objectType.checked}
+                        onChange={() => handleSwitchChange(objectType)}
+                      />
+                    }
+                    label={objectType.value}
+                  />
+                </Grow>
+                <Divider light />
+              </>
+            );
+          })}
+      </div>
+    </div>
+  );
 }

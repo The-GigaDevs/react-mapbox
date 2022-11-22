@@ -8,35 +8,90 @@ body {
 }
 
 .mapboxgl-popup-close-button {
-  font-size: larger;
   background-color: gray;
-  color: white;
   border-radius: 2px;
+  color: white;
+  font-size: larger;
 }
 .mapboxgl-popup-close-button:hover {
   background-color: red;
   color: white;
 }
 
-
 .on-top {
   z-index: 100;
 }
 
 .slider {
-  position: absolute;
   bottom: 3rem;
+  position: absolute;
   z-index: 100;
 }
 
-.object-types {
-  margin-top: 1rem;
-  height: 200px;
-  width: max-content;
+.glass-effect {
+  backdrop-filter: blur(2px);
   background: rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(2px);
+  padding: 5px 10px;
   -webkit-backdrop-filter: blur(2px);
-  padding: 0 10px;
+}
+
+.object-types {
+  left: 1%;
+  position: absolute;
+  top: 1%;
+  z-index: 100;
+  min-height: 30vh;
+  max-height: 95vh;
+  padding-left: 1.3rem;
+  padding-top: 1.3rem;
+}
+
+.object {
+  margin-top: 0.625rem;
+  min-height: 30vh;
+  height: 50vh;
+  resize: vertical;
+  overflow: auto;
+  display: flex;
+  max-height: 95vh;
+  flex-direction: column;
+  padding-left: 1.3rem;
+}
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(180deg, #d0368a 0%, #708ad4 99%);
+  box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+  border-radius: 100px;
+}
+
+.object-types-switch {
+  margin-left: 5px;
+}
+
+.scroll-5 {
+  --scroll-size: 15px;
+  --scroll-radius: 20px;
+  --scroll-track: rgb(255 255 255 / 10%);
+  --scroll-thumb: linear-gradient(45deg, #00aeff, #a68eff);
+}
+.scroll {
+  scrollbar-color: var(--scroll-thumb-color, grey) var(--scroll-track, transparent);
+  scrollbar-width: thin;
+}
+
+.scroll::-webkit-scrollbar {
+  width: var(--scroll-size, 10px);
+  height: var(--scroll-size, 10px);
+}
+
+.scroll::-webkit-scrollbar-track {
+  background-color: var(--scroll-track, transparent);
+  border-radius: var(--scroll-track-radius, var(--scroll-radius));
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb-color, grey);
+  background-image: var(--scroll-thumb, none);
+  border-radius: var(--scroll-thumb-radius, var(--scroll-radius));
 }
