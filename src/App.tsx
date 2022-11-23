@@ -15,7 +15,6 @@ import {
   ObjectType,
   ObjectTypeEvent,
 } from "./app.model";
-import { DUMMY_RESPONSE } from "./example-response";
 import ObjectTypesComponent from "./ObjectTypes";
 import ZoomSlider from "./ZoomSlider";
 
@@ -37,27 +36,30 @@ function App(): JSX.Element {
 
   // Side effects
   useEffect(() => {
-    const data = DUMMY_RESPONSE;
-    setGeoData(data);
+    fetch("http://localhost:3001/example")
+      .then((response) => response.json())
+      .then((data: ExampleResponse) => {
+        setGeoData(data);
 
-    const objectTypes = data.features?.map(
-      (feature) => feature.properties?.ObjectType
-    );
-    const uniqueObjectTypes = objectTypes?.filter(
-      (value, index, self) => self.indexOf(value) === index
-    );
+        const objectTypes = data.features?.map(
+          (feature) => feature.properties?.ObjectType
+        );
+        const uniqueObjectTypes = objectTypes?.filter(
+          (value, index, self) => self.indexOf(value) === index
+        );
 
-    // after getting response populate the objectTypesList
-    const values = Object.keys(ObjectType).map((key) => {
-      const value = key as ObjectType;
-      return {
-        checked: uniqueObjectTypes?.includes(value),
-        value,
-      };
-    });
+        // after getting response populate the objectTypesList
+        const values = Object.keys(ObjectType).map((key) => {
+          const value = key as ObjectType;
+          return {
+            checked: uniqueObjectTypes?.includes(value),
+            value,
+          };
+        });
 
-    setObjectTypeList(values);
-  }, [setObjectTypeList]);
+        setObjectTypeList(values);
+      });
+  }, []);
 
   return (
     <div style={{ position: "relative" }}>
