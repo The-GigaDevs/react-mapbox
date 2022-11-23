@@ -36,7 +36,8 @@ function App(): JSX.Element {
 
   // Side effects
   useEffect(() => {
-    fetch("http://localhost:3001/example")
+    const baseURL = process.env.REACT_APP_API_URL;
+    fetch(`${baseURL}/example`)
       .then((response) => response.json())
       .then((data: ExampleResponse) => {
         setGeoData(data);
