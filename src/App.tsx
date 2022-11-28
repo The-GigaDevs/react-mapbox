@@ -78,6 +78,7 @@ function App(): JSX.Element {
         }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
         mapboxAccessToken={ACCESS_TOKEN}
+        scrollZoom={false}
       >
         <ObjectTypesComponent
           objectTypes={objectTypeList}
