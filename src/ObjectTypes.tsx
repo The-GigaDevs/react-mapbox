@@ -39,7 +39,7 @@ export default function ObjectTypesComponent({
         className="object scroll scroll-5"
         style={{
           overflow: open ? "auto" : "hidden",
-          resize: open ? "vertical" : "none",
+          height: open ? "50vh" : "min-content",
         }}
       >
         {open &&
