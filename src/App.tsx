@@ -60,23 +60,16 @@ function App(): JSX.Element {
 
         setObjectTypeList(values);
       });
-  }, []);
+  }, [setObjectTypeList]);
 
   return (
     <div style={{ position: "relative" }}>
       <Map
-        initialViewState={{
-          latitude: 31,
-          longitude: 74,
-          zoom: 0,
-        }}
         style={{
           width: "100vw",
           height: "100vh",
-          display: "flex",
-          justifyContent: "center",
         }}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
+        mapStyle="mapbox://styles/mapbox/streets-v12"
         mapboxAccessToken={ACCESS_TOKEN}
         scrollZoom={false}
       >
