@@ -69,6 +69,7 @@ body {
   scrollbar-color: var(--scroll-thumb-color, grey)
     var(--scroll-track, transparent);
   scrollbar-width: thin;
+  cursor: grab;
 }
 
 .scroll::-webkit-scrollbar {
