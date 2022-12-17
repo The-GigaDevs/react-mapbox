@@ -1,3 +1,4 @@
+import { FormLabel } from "@mui/material";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 
@@ -12,22 +13,12 @@ function ZoomSlider({ rangeValues, rangeHandler }: Props): JSX.Element {
   };
 
   return (
-    <div
-      className="glass-effect"
-      style={{
-        zIndex: 100,
-        position: "absolute",
-        left: "50%",
-        top: "1rem",
-        width: "50%",
-        transform: "translate(-50%, 0)",
-        height: "max-content",
-      }}
-    >
+    <div className="glass-effect slider">
       <Box>
+        <FormLabel>Bulidings height range: </FormLabel>
         <Slider
           max={2000}
-          getAriaLabel={() => "Temperature range"}
+          getAriaLabel={() => "Building height range"}
           value={rangeValues}
           onChange={handleChange}
           valueLabelDisplay="auto"

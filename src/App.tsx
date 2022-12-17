@@ -20,7 +20,7 @@ import ZoomSlider from "./ZoomSlider";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
-function App(): JSX.Element {
+export default function App(): JSX.Element {
   // States
   const [geoData, setGeoData] = useState<ExampleResponse>(
     {} as ExampleResponse
@@ -139,5 +139,3 @@ function App(): JSX.Element {
     </div>
   );
 }
-
-export default App;

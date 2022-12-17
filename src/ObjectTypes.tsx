@@ -2,7 +2,7 @@ import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grow from "@mui/material/Grow";
 import Switch from "@mui/material/Switch";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { ObjectTypeEvent } from "./app.model";
 
 interface Props {
@@ -40,13 +40,14 @@ export default function ObjectTypesComponent({
         style={{
           overflow: open ? "auto" : "hidden",
           height: open ? "50vh" : "min-content",
+          marginTop: "0.625rem",
         }}
       >
         {open &&
           objectTypes.map((objectType, index: number) => {
             return (
-              <>
-                <Grow in={open} key={index}>
+              <Fragment key={index}>
+                <Grow in={open}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -58,7 +59,7 @@ export default function ObjectTypesComponent({
                   />
                 </Grow>
                 <Divider light />
-              </>
+              </Fragment>
             );
           })}
       </div>
