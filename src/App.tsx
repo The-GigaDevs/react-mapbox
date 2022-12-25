@@ -1,3 +1,4 @@
+import { debounce } from "lodash";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useState } from "react";
 import Map, {
@@ -7,6 +8,7 @@ import Map, {
   NavigationControl,
   Popup,
   ScaleControl,
+  ViewStateChangeEvent,
 } from "react-map-gl";
 import "./App.css";
 import {
@@ -14,6 +16,7 @@ import {
   Feature,
   ObjectType,
   ObjectTypeEvent,
+  RequestBody,
 } from "./app.model";
 import ObjectTypesComponent from "./ObjectTypes";
 import ZoomSlider from "./ZoomSlider";
@@ -33,6 +36,12 @@ export default function App(): JSX.Element {
     React.SetStateAction<ObjectTypeEvent[]>
   >;
   [objectTypeList, setObjectTypeList] = useState([] as ObjectTypeEvent[]);
+
+  const [reqBody, setReqBody] = useState<RequestBody>({
+    latitude: 0,
+    longitude: 0,
+    radius: 400,
+  });
 
   // Side effects
   useEffect(() => {
@@ -62,6 +71,44 @@ export default function App(): JSX.Element {
       });
   }, [setObjectTypeList]);
 
+  const getData = (reqBody: RequestBody) => {
+    const baseURL = process.env.REACT_APP_API_URL;
+    fetch(`${baseURL}/objects`, {
+      method: "POST",
+      body: JSON.stringify(reqBody),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data: ExampleResponse) => {
+        setGeoData(data);
+
+        const objectTypes = data.features?.map(
+          (feature) => feature.properties?.ObjectType
+        );
+        const uniqueObjectTypes = objectTypes?.filter(
+          (value, index, self) => self.indexOf(value) === index
+        );
+
+        // after getting response populate the objectTypesList
+        const values = Object.keys(ObjectType).map((key) => {
+          const value = key as ObjectType;
+          return {
+            checked: uniqueObjectTypes?.includes(value),
+            value,
+          };
+        });
+
+        setObjectTypeList(values);
+      });
+  };
+
+  const getUpdatedData = debounce((event: ViewStateChangeEvent) => {
+    const { latitude, longitude } = event.viewState;
+    const body = { latitude, longitude, radius: 400 };
+    console.log("updated data", body);
+    getData(body);
+  }, 1000);
+
   return (
     <div style={{ position: "relative" }}>
       <Map
@@ -72,6 +119,8 @@ export default function App(): JSX.Element {
         mapStyle="mapbox://styles/mapbox/streets-v12"
         mapboxAccessToken={ACCESS_TOKEN}
         scrollZoom={false}
+        onZoomEnd={getUpdatedData}
+        onDragEnd={getUpdatedData}
       >
         <ObjectTypesComponent
           objectTypes={objectTypeList}
@@ -107,8 +156,11 @@ export default function App(): JSX.Element {
                   }}
                 >
                   <i
-                    className="bi bi-geo-alt-fill h2"
-                    style={{ fontSize: "25px" }}
+                    className="bi bi-geo-alt-fill"
+                    style={{
+                      fontSize: "25px",
+                      color: "rgb(25, 118, 210)",
+                    }}
                   ></i>
                 </Marker>
               )
@@ -126,11 +178,17 @@ export default function App(): JSX.Element {
               className="mt-3"
               style={{
                 minHeight: "30px",
-                maxHeight: "35px",
                 marginTop: "1.1rem",
               }}
             >
-              {popupInfo.properties.ObjectType} --- {popupInfo.properties.City}
+              <li>Object Type: {popupInfo.properties.ObjectType}</li>
+              <li>Country: {popupInfo.properties.Country}</li>
+              {popupInfo.properties.State && (
+                <li>State: {popupInfo.properties.State}</li>
+              )}
+              {popupInfo.properties.City && (
+                <li>City: {popupInfo.properties.City}</li>
+              )}
             </div>
           </Popup>
         )}
