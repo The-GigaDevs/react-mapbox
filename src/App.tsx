@@ -1,6 +1,6 @@
 import { debounce } from "lodash";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Map, {
   FullscreenControl,
   GeolocateControl,
@@ -37,40 +37,6 @@ export default function App(): JSX.Element {
   >;
   [objectTypeList, setObjectTypeList] = useState([] as ObjectTypeEvent[]);
 
-  const [reqBody, setReqBody] = useState<RequestBody>({
-    latitude: 0,
-    longitude: 0,
-    radius: 400,
-  });
-
-  // Side effects
-  useEffect(() => {
-    const baseURL = process.env.REACT_APP_API_URL;
-    fetch(`${baseURL}/example`)
-      .then((response) => response.json())
-      .then((data: ExampleResponse) => {
-        setGeoData(data);
-
-        const objectTypes = data.features?.map(
-          (feature) => feature.properties?.ObjectType
-        );
-        const uniqueObjectTypes = objectTypes?.filter(
-          (value, index, self) => self.indexOf(value) === index
-        );
-
-        // after getting response populate the objectTypesList
-        const values = Object.keys(ObjectType).map((key) => {
-          const value = key as ObjectType;
-          return {
-            checked: uniqueObjectTypes?.includes(value),
-            value,
-          };
-        });
-
-        setObjectTypeList(values);
-      });
-  }, [setObjectTypeList]);
-
   const getData = (reqBody: RequestBody) => {
     const baseURL = process.env.REACT_APP_API_URL;
     fetch(`${baseURL}/objects`, {
@@ -104,8 +70,7 @@ export default function App(): JSX.Element {
 
   const getUpdatedData = debounce((event: ViewStateChangeEvent) => {
     const { latitude, longitude } = event.viewState;
-    const body = { latitude, longitude, radius: 400 };
-    console.log("updated data", body);
+    const body = { latitude, longitude, radius: 3 };
     getData(body);
   }, 1000);
 
