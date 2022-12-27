@@ -19,6 +19,7 @@ import {
   RequestBody,
 } from "./app.model";
 import ObjectTypesComponent from "./ObjectTypes";
+import PopupItems from "./PopupItems";
 import ZoomSlider from "./ZoomSlider";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -70,7 +71,7 @@ export default function App(): JSX.Element {
 
   const getUpdatedData = debounce((event: ViewStateChangeEvent) => {
     const { latitude, longitude } = event.viewState;
-    const body = { latitude, longitude, radius: 3 };
+    const body = { latitude, longitude, radius: 1 };
     getData(body);
   }, 1000);
 
@@ -138,22 +139,14 @@ export default function App(): JSX.Element {
             closeButton={true}
             closeOnClick={false}
             onClose={() => setPopupInfo(null)}
+            style={{
+              minWidth: "max-content",
+              padding: "5px",
+              paddingRight: "10px",
+            }}
           >
-            <div
-              className="mt-3"
-              style={{
-                minHeight: "30px",
-                marginTop: "1.1rem",
-              }}
-            >
-              <li>Object Type: {popupInfo.properties.ObjectType}</li>
-              <li>Country: {popupInfo.properties.Country}</li>
-              {popupInfo.properties.State && (
-                <li>State: {popupInfo.properties.State}</li>
-              )}
-              {popupInfo.properties.City && (
-                <li>City: {popupInfo.properties.City}</li>
-              )}
+            <div className="mt-3 scroll scroll-5 custom-popup">
+              <PopupItems properties={popupInfo.properties} />
             </div>
           </Popup>
         )}
